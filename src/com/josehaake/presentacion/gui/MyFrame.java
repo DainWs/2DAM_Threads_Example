@@ -1,21 +1,16 @@
 package com.josehaake.presentacion.gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-
-import javax.swing.BoxLayout;
+import java.awt.image.BufferStrategy;
 import java.awt.Canvas;
 import java.awt.Color;
 
@@ -38,21 +33,6 @@ public class MyFrame extends JFrame {
 	private Canvas canvas;
 	
 	private boolean isClosing = false;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MyFrame frame = new MyFrame();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -113,20 +93,34 @@ public class MyFrame extends JFrame {
 	}
 	
 	public void update() {
-		
 		controller.update();
 	}
 	
 	public void draw() {
 		
-		Graphics2D g = (Graphics2D)canvas.getGraphics();
+		BufferStrategy strategy = canvas.getBufferStrategy();
+		
+		if (strategy==null) {
+			canvas.createBufferStrategy(3);
+			return;
+		}
+		
+		Graphics g = strategy.getDrawGraphics();
+		
 		if(g != null) {
 			
-			g.setColor(Color.BLACK);
-			g.drawString("hola muy buenas", 0, 0);
-			g.drawRect(0, 0, canvas.getWidth(), canvas.getHeight());
+			g.setColor(Color.WHITE);
+			g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 			
+			g.setColor(Color.BLACK);
+			g.drawRect(0, 0, canvas.getWidth() - 1, canvas.getHeight() - 1);
+			
+			controller.draw(g);
+			
+			g.dispose();
 		}
+		
+		strategy.show();
 	}
 	
 	public boolean isClosing() {
@@ -135,10 +129,6 @@ public class MyFrame extends JFrame {
 	
 	public FrameController getController() {
 		return controller;
-	}
-	
-	public Graphics getCanvasGraphics() {
-		return canvas.getGraphics();
 	}
 
 }

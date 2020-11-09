@@ -1,10 +1,11 @@
 package com.josehaake.presentacion.gui;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+
+import com.josehaake.presentacion.entities.House;
+import com.josehaake.presentacion.entities.Person;
 
 /**
  * 
@@ -13,7 +14,7 @@ import java.util.Iterator;
  */
 public class FrameController {
 
-	//private Collection<Person> threads = new ArrayList<Person>();
+	private Collection<Person> threads = new ArrayList<Person>();
 	
 	private MyFrame owner;
 	
@@ -26,30 +27,28 @@ public class FrameController {
 	public void start() {
 		isRunning = true;
 		
-		/*
 		House house = new House();
-		*/
 		
 		for (int i = 0; i < 3; i++) {
-			/*
-			Person newPerson = new Person(house, this);
+			
+			Person newPerson = new Person(house);
 			newPerson.start();
-			threads.add(new Person());
-			*/
+			threads.add(newPerson);
+			
 		}
 	}
 	
 	public void stop() {
 		isRunning = false;
 		
-		/*
+		
 		for (Person person : threads) {
 			try {
 				person.join();
 			} 
 			catch(InterruptedException iex) {}
 		}
-		*/
+		
 	}
 	
 	public void restart() {
@@ -57,20 +56,16 @@ public class FrameController {
 		start();
 	}
 	
-	public void update() {
-		//draw();
+	public void update() {}
+	
+	public void draw(Graphics g) {
+		for (Person person : threads) {
+			person.draw(g);
+		}
 	}
 	
-	public void draw() {
-		Graphics g = owner.getGraphics();
-		
-		g.setColor(Color.BLACK);
-		g.drawRect(0, 0, owner.getWidth(), owner.getHeight());
-		/*
-		for (Person person : threads) {
-			person.draw();
-		}
-		*/
+	public MyFrame getOwner() {
+		return owner;
 	}
 	
 	public boolean isRunning() {
