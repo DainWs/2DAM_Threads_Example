@@ -4,8 +4,8 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.josehaake.presentacion.entities.House;
 import com.josehaake.presentacion.entities.Person;
+import com.josehaake.presentacion.scenes.House;
 
 /**
  * 
@@ -14,8 +14,7 @@ import com.josehaake.presentacion.entities.Person;
  */
 public class FrameController {
 
-	private Collection<Person> threads = new ArrayList<Person>();
-	
+	private House houseThread;
 	private MyFrame owner;
 	
 	private boolean isRunning = false;
@@ -27,28 +26,19 @@ public class FrameController {
 	public void start() {
 		isRunning = true;
 		
-		House house = new House();
+		houseThread = new House();
 		
 		for (int i = 0; i < 3; i++) {
-			
-			Person newPerson = new Person(house);
-			newPerson.start();
-			threads.add(newPerson);
-			
+			Person newPerson = new Person(houseThread);
+			houseThread.enter(newPerson);
 		}
+		
+		houseThread.start();
 	}
 	
 	public void stop() {
 		isRunning = false;
-		
-		
-		for (Person person : threads) {
-			try {
-				person.join();
-			} 
-			catch(InterruptedException iex) {}
-		}
-		
+		houseThread.stop();
 	}
 	
 	public void restart() {
@@ -59,9 +49,7 @@ public class FrameController {
 	public void update() {}
 	
 	public void draw(Graphics g) {
-		for (Person person : threads) {
-			person.draw(g);
-		}
+		houseThread.draw(g);
 	}
 	
 	public MyFrame getOwner() {
