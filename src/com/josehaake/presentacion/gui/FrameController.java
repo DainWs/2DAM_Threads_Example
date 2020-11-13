@@ -46,7 +46,9 @@ public class FrameController {
 		start();
 	}
 	
-	public void update() {}
+	public void update() {
+		houseThread.update();
+	}
 	
 	public void draw(Graphics g) {
 		houseThread.draw(g);
