@@ -1,8 +1,8 @@
 package com.josehaake.presentacion.gui;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.Collection;
+
+import javax.swing.JOptionPane;
 
 import com.josehaake.presentacion.entities.Person;
 import com.josehaake.presentacion.scenes.House;
@@ -14,31 +14,40 @@ import com.josehaake.presentacion.scenes.House;
  */
 public class FrameController {
 
-	private House houseThread;
-	private MyFrame owner;
+	private static final String[] PERSONS_NAMES = {
+			"Julio",
+			"Mark",
+			"Jhon",
+			"Pepe",
+			"Julie",
+	};
 	
-	private boolean isRunning = false;
+	private House house;
+	private MyFrame owner;
 	
 	public FrameController(MyFrame owner) {
 		this.owner = owner;
+		
+		house = new House();
+		
+		for (int i = 0; i < PERSONS_NAMES.length; i++) {
+			Person newPerson = new Person(PERSONS_NAMES[i], house);
+			house.enter(newPerson);
+		}
 	}
 	
 	public void start() {
-		isRunning = true;
-		
-		houseThread = new House();
-		
-		for (int i = 0; i < 3; i++) {
-			Person newPerson = new Person(houseThread);
-			houseThread.enter(newPerson);
-		}
-		
-		houseThread.start();
+		house.start();
 	}
 	
 	public void stop() {
-		isRunning = false;
-		houseThread.stop();
+		house.stop(owner.getThreadOutputTextPane());
+		JOptionPane.showMessageDialog(
+			owner,
+			"The emulation has stopped successfully",
+			"Stopping Emulation.",
+			JOptionPane.INFORMATION_MESSAGE
+		);
 	}
 	
 	public void restart() {
@@ -47,11 +56,11 @@ public class FrameController {
 	}
 	
 	public void update() {
-		houseThread.update();
+		house.update();
 	}
 	
 	public void draw(Graphics g) {
-		houseThread.draw(g);
+		house.draw(g);
 	}
 	
 	public MyFrame getOwner() {
@@ -59,6 +68,6 @@ public class FrameController {
 	}
 	
 	public boolean isRunning() {
-		return isRunning;
+		return !house.isFinished();
 	}
 }

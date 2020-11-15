@@ -2,6 +2,11 @@ package com.josehaake.presentacion;
 
 import com.josehaake.presentacion.gui.MyFrame;
 
+/**
+ * 
+ * @author JoseDuarte
+ *
+ */
 public class Program implements Runnable {
 	
 	private MyFrame frame;
@@ -14,17 +19,19 @@ public class Program implements Runnable {
 		start();		
 	}
 	
-	public synchronized void start() {
+	public void start() {
 		isRunning = true;
 		
 		thisThread = new Thread(this, "Graphics");
 		thisThread.start();
 	}
 	
-	private synchronized void stop() {
+	private void stop() {
 		isRunning = false;
 		
 		try {
+			frame.getController().stop();
+			
 			thisThread.join();
 		}
 		catch (InterruptedException e) {
@@ -44,7 +51,7 @@ public class Program implements Runnable {
 	}
 	
 	/**
-	 * Actualiza los graficos 60 veces por segundo
+	 * UPDATE FPS AND UPS (60)
 	 */
 	@Override
 	public void run() {

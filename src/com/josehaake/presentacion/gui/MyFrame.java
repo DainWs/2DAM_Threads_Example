@@ -5,7 +5,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
-import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -13,6 +12,11 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Dimension;
+import javax.swing.JLabel;
+import javax.swing.JTextPane;
+import javax.swing.BoxLayout;
+import javax.swing.border.MatteBorder;
 
 /**
  * 
@@ -23,6 +27,9 @@ public class MyFrame extends JFrame {
 
 	private static final long serialVersionUID = 5039838508134343883L;
 
+	public static final int CANVAS_WIDTH = 700;
+	public static final int CANVAS_HEIHT = 700;
+	
 	private FrameController controller;
 	
 	private JPanel contentPane;
@@ -33,6 +40,8 @@ public class MyFrame extends JFrame {
 	private Canvas canvas;
 	
 	private boolean isClosing = false;
+	private JLabel lblNewLabel;
+	private JTextPane threadsMessage;
 
 	/**
 	 * Create the frame.
@@ -52,17 +61,25 @@ public class MyFrame extends JFrame {
 		initListeners();
 		update();
 		
+		pack();
 		setVisible(true);
 	}
 	
 	public void initComponents() {
 			
 			canvas = new Canvas();
+			canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIHT));
 		contentPane.add(canvas, BorderLayout.CENTER);
 
 			JPanel buttonPanel = new JPanel();
-			FlowLayout flowLayout = (FlowLayout) buttonPanel.getLayout();
-			flowLayout.setAlignment(FlowLayout.RIGHT);
+			buttonPanel.setBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(0, 0, 0)));
+				buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+				
+				lblNewLabel = new JLabel("Finished Threads :");
+				buttonPanel.add(lblNewLabel);
+				
+				threadsMessage = new JTextPane();
+				buttonPanel.add(threadsMessage);
 			
 				btnStart = new JButton("Start");
 			buttonPanel.add(btnStart);
@@ -84,6 +101,7 @@ public class MyFrame extends JFrame {
 		});
 		
 		btnStart.addActionListener((ActionEvent ae) -> {
+			threadsMessage.setText("");
 			controller.start();
 		});
 		
@@ -129,6 +147,10 @@ public class MyFrame extends JFrame {
 	
 	public FrameController getController() {
 		return controller;
+	}
+
+	public JTextPane getThreadOutputTextPane() {
+		return threadsMessage;
 	}
 
 }
