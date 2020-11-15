@@ -59,7 +59,7 @@ public class Person extends Thread {
 	
 	/**
 	 * first of all, the person enter in a random room.
-	 * every 0-10 seconds, the persond decide go to other room
+	 * every 0-10 seconds, the person decide go to other room
 	 */
 	@Override
 	public void run() {
