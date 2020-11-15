@@ -65,7 +65,6 @@ public class Room {
 			if(person.equals(personsInRoom[i])) {
 				personsInRoom[i] = null;
 				centinel--;
-				update();
 				break;
 			}
 		}
